@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Library{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form id="searchForm">
+          <div class="form-group">
+            <input type="text" class="form-control" id="search" name="search" placeholder="Search..." value="{{ search }}">
+          </div>
+        </form>
+        <table class="table table-hover">
+            <tr>
+                <th>Book</th>
+                <th>Year</th>
+                <th>Author</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            {% for book in books.items %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.year }}</td>
+                <td>{{ book.name }} {{ book.lastname }}</td>
+                <td>
+                    <a href="/books/{{ book.id }}">
+                        <button class="btn btn-info">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </button>
+                     </a>
+                </td>
+                <td width="200">
+                    <form class="form-horizontal" id="delete" action="/book/delete/{{ book.id }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    <center>
+        {% if books.has_prev %}<a href="{{ url_for('index', page = books.prev_num) }}"><< Newer books</a>{% else %}<< Newer books{% endif %} | 
+        {% if books.has_next %}<a href="{{ url_for('index', page = books.next_num) }}">Older books >></a>{% else %}Older books >>{% endif %}
+    </center>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script src="{{ url_for('static', filename='library.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Book{% endblock %}
+
+{% block page_content %}
+<form  class="form-horizontal" action="/addbook" method="post" >
+    <div class="form-group">
+    Add book:<br><br>
+    {{ form.title }} Title <br><br>
+
+    {{ form.year }} Year<br><br>
+    {{ form.author_id }} Author<br><br>
+    <input type="submit" value="Add book">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </div>
+</form>
+{% endblock %}

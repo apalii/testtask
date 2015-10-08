@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Add Author{% endblock %}
+
+{% block page_content %}
+<form action="/addauthor" method="post" name="addingauthor">
+    <div class="form-group">
+    Add author:<br><br>
+    {{ form.name }} Name <br><br>
+    
+    {{ form.lastname }} Lastname<br><br>
+    {{ form.born }} Year of born<br><br>
+    <input type="submit" value="Add author">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </div>
+</form>
+{% endblock %}
+
+
