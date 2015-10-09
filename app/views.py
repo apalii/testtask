@@ -18,9 +18,6 @@ def index(page=1):
 
 @app.route('/search/<search>')
 def search(search): 
-    # print search, type(search), search.isdigit()
-    # Book.title.ilike('%{}%'.format(search))
-    # func.lower(Book.title) == func.lower(search)
     if search.isdigit():
         books = Book.query.join(Author).add_columns(
             Book.title, Book.year, Book.id, Author.name, Author.lastname).filter(
@@ -44,7 +41,7 @@ def authors(page=1):
     return render_template('authors.html', authors=authors)
 
 
-@app.route('/authors/<id>')
+@app.route('/author/<id>')
 def author(id):
     author = Author.query.get(id)
     form = AuthorForm(request.form, obj=author)
@@ -66,13 +63,12 @@ def addauthor():
 @app.route('/updateauthor', methods=['POST'])
 def updateauthor():
     form = AuthorForm(request.form)
-    print(form.id.data)
     author = Author.query.get_or_404(form.id.data)
     if request.method == 'POST':
         form.populate_obj(author)
         db.session.commit()
         return redirect(url_for('authors'))
-
+    return render_template('error.html', form=form)
 
 @app.route('/books/<id>')
 def book(id):
@@ -85,12 +81,13 @@ def book(id):
 @app.route('/updatebook', methods=['POST'])
 def updatebook():
     form = BookForm(request.form)
-    print(form.id.data)
+    form.author_id.choices = [(i.id, i.lastname) for i in Author.query.all()]
     book = Book.query.get_or_404(form.id.data)
-    if request.method == 'POST':
+    if request.method == 'POST' and form.validate():
         form.populate_obj(book)
         db.session.commit()
         return redirect(url_for('index'))
+    return render_template('error.html', form=form)
 
 
 @app.route('/addbook', methods=['GET', 'POST'])

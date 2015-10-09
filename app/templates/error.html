@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Error page{% endblock %}
+
+{% block page_content %}
+
+  {% if form.errors %}
+Validation failed due to incorrect :
+    <ul class=errors>  
+    {% for error in form.errors %}
+      <li><b>{{ error }}</b></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+{% endblock %}
